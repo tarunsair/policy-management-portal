@@ -1,0 +1,26 @@
+<input
+  type="text"
+  placeholder="Search policy"
+  [(ngModel)]="searchText"
+/>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>Policy Number</th>
+      <th>Customer Name</th>
+      <th>Policy Type</th>
+      <th>Premium</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let policy of filterPolicies()">
+      <td>{{ policy.policyNumber }}</td>
+      <td>{{ policy.customerName }}</td>
+      <td>{{ policy.policyType }}</td>
+      <td>{{ policy.premiumAmount }}</td>
+      <td>{{ policy.status }}</td>
+    </tr>
+  </tbody>
+</table>
