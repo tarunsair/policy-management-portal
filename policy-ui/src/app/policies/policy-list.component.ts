@@ -9,6 +9,7 @@ import { Policy } from './policy.model';
 export class PolicyListComponent implements OnInit {
 
   policies: Policy[] = [];
+  filteredPolicies: Policy[] = [];
   searchText: string = '';
 
   constructor(private policyService: PolicyService) {}
@@ -17,16 +18,33 @@ export class PolicyListComponent implements OnInit {
     this.loadPolicies();
   }
 
-  loadPolicies() {
-    this.policyService.getPolicies().subscribe((data: any) => {
-      this.policies = data;
-    });
-  }
+  loading = false;
+errorMessage = '';
 
-  filterPolicies() {
-    return this.policies.filter(p =>
-      p.policyNumber.includes(this.searchText) ||
-      p.customerName.includes(this.searchText)
+
+loadPolicies(): void {
+  this.loading = true;
+  this.errorMessage = '';
+
+  this.policyService.getPolicies().subscribe({
+    next: (data) => {
+      this.policies = data;
+      this.filteredPolicies = data;
+      this.loading = false;
+    },
+    error: (error) => {
+      this.errorMessage = error.message;
+      this.loading = false;
+    }
+  });
+}
+
+  onSearchChange(): void {
+    const text = this.searchText?.toLowerCase() || '';
+
+    this.filteredPolicies = this.policies.filter(p =>
+      p.policyNumber.toLowerCase().includes(text) ||
+      p.customerName.toLowerCase().includes(text)
     );
   }
 }
